@@ -9,6 +9,7 @@ Ce document décrit, étape par étape, l'installation d'un serveur GLPI (derni�
 afin que la VM obtienne une adresse IP directement sur le réseau local, dans la plage 192.168.x.x.
 
 Cette procédure s'appuie sur le tutoriel d'IT-Connect : Installation pas-à-pas de GLPI sur Debian.
+
 Étape 1 — Configurer le réseau de la VM en pont (virbr0)
 Sur l'hyperviseur (le PC Linux hôte), il faut d'abord configurer l'interface réseau de la VM en mode pont sur virbr0, plutôt qu'en NAT, 
 pour que la VM obtienne une IP directement sur le sous-réseau local 192.168.x.x au lieu d'une IP privée en 10.x.x.x. 
@@ -121,6 +122,7 @@ sudo systemctl restart apache2
 
 Étape 9 — Terminer l'installation via le navigateur
 Depuis un poste du même réseau local, grâce au pont virbr0, on ouvre un navigateur et on se rend sur l'adresse http://<IP-192.168.x.x>/ ou sur http://support.computasys/ si le nom d'hôte a été déclaré. On choisit ensuite la langue, on clique sur Installer, puis on vérifie que tous les prérequis affichés sont bien validés avant de continuer.
+
 À l'étape suivante, on renseigne les informations de connexion à la base de données : le serveur SQL est localhost, l'utilisateur est glpi_adm et le mot de passe est celui défini à l'étape 4. On sélectionne ensuite la base glpi_computasys créée précédemment, puis on termine l'assistant.
 Une fois l'installation terminée, GLPI indique les identifiants du compte administrateur par défaut : glpi / glpi.
 
