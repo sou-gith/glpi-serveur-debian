@@ -8,6 +8,8 @@ Serveur GLPI sur Debian —
 Ce document décrit, étape par étape, l'installation d'un serveur GLPI (dernière version) sur une VM Debian, avec une carte réseau configurée en pont (bridge, virbr0) 
 afin que la VM obtienne une adresse IP directement sur le réseau local, dans la plage 192.168.x.x.
 
+sudo apt purge task-gnome-desktop gnome-shell
+sudo apt autoremove : pour enlever l'interface graphique
 Cette procédure s'appuie sur le tutoriel d'IT-Connect : Installation pas-à-pas de GLPI sur Debian.
 
 Étape 1 — Configurer le réseau de la VM en pont (virbr0)
