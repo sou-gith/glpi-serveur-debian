@@ -42,20 +42,20 @@ Puis on se connecte à MariaDB en tant que root pour créer une base de données
 sudo mysql -u root -p
 
 Une fois connecté, on exécute les requêtes suivantes :
-CREATE DATABASE glpi_computasys;
-GRANT ALL PRIVILEGES ON glpi_computasys.* TO 'glpi_adm'@'localhost' IDENTIFIED BY 'MotDePasseRobuste';
+CREATE DATABASE glpi_tssr;
+GRANT ALL PRIVILEGES ON glpi_tssr.* TO 'glpi_adm'@'localhost' IDENTIFIED BY 'MotDePasseRobuste';
 FLUSH PRIVILEGES;
 EXIT;
 
 Étape 5 — Télécharger GLPI
-On récupère la dernière version disponible sur le dépôt GitHub officiel du projet GLPI, puis on télécharge l'archive dans /tmp avant de l'extraire dans /var/cd /tmp
-wget https://github.com/glpi-project/glpi/releases/download/<VERSION>/glpi-<VERSION>.tgz
-sudo tar -xzvf glpi-<VERSION>.tgz -C /var/www/
-
+On récupère la dernière version disponible sur le dépôt GitHub officiel du projet GLPI, puis on télécharge l'archive dans /tmp avant de l'extraire dans /var
+cd /tmp
+wget https://github.com/glpi-project/glpi/releases/download/11.0.4/glpi-11.0.4.tgz
+sudo tar -xzvf glpi-11.0.4.tgz -C /var/www/
 
 Étape 6 — Préparer l'installation (droits et répertoires)
 On commence par donner la propriété des fichiers de GLPI à l'utilisateur www-data, celui utilisé par Apache2 :
-sudo chown www-data /var/www/glpi/ -R
+sudo chown -R www-data:www-data /var/www/glpi
 
 Pour suivre les recommandations de sécurité de l'éditeur, on sort ensuite trois répertoires sensibles de la racine web. D'abord le répertoire de configuration :
 sudo mkdir /etc/glpi
@@ -80,9 +80,9 @@ define('GLPI_VAR_DIR', '/var/lib/glpi/files');
 define('GLPI_LOG_DIR', '/var/log/glpi');
 
 Étape 7 — Configurer Apache2
-On crée un fichier de VirtualHost dédié à GLPI, par exemple /etc/apache2/sites-available/support.computasys.conf :
+On crée un fichier de VirtualHost dédié à GLPI, par exemple /etc/apache2/sites-available/glpi_tssr.conf :
 <VirtualHost *:80>
-    ServerName support.computasys
+    ServerName glpi_tssr
 
     DocumentRoot /var/www/glpi/public
 
@@ -100,7 +100,7 @@ On crée un fichier de VirtualHost dédié à GLPI, par exemple /etc/apache2/sit
 </VirtualHost>
 
 Une fois le fichier enregistré, on active ce nouveau site, on désactive le site par défaut (inutile) et on active le module de réécriture d'URL nécessaire à GLPI :
-sudo a2ensite support.computasys.conf
+sudo a2ensite glpi_tssr.conf
 sudo a2dissite 000-default.conf
 sudo a2enmod rewrite
 sudo systemctl restart apache2
@@ -123,7 +123,7 @@ Puis on redémarre Apache2 une dernière fois :
 sudo systemctl restart apache2
 
 Étape 9 — Terminer l'installation via le navigateur
-Depuis un poste du même réseau local, grâce au pont virbr0, on ouvre un navigateur et on se rend sur l'adresse http://<IP-192.168.x.x>/ ou sur http://support.computasys/ si le nom d'hôte a été déclaré. On choisit ensuite la langue, on clique sur Installer, puis on vérifie que tous les prérequis affichés sont bien validés avant de continuer.
+Depuis un poste du même réseau local, grâce au pont virbr0, on ouvre un navigateur et on se rend sur l'adresse http://<IP-192.168.x.x>/ ou sur http://glpi_tssr/ si le nom d'hôte a été déclaré. On choisit ensuite la langue, on clique sur Installer, puis on vérifie que tous les prérequis affichés sont bien validés avant de continuer.
 
 À l'étape suivante, on renseigne les informations de connexion à la base de données : le serveur SQL est localhost, l'utilisateur est glpi_adm et le mot de passe est celui défini à l'étape 4. On sélectionne ensuite la base glpi_computasys créée précédemment, puis on termine l'assistant.
 Une fois l'installation terminée, GLPI indique les identifiants du compte administrateur par défaut : glpi / glpi.
